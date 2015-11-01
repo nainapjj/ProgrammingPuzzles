@@ -4,42 +4,49 @@ import java.util.Scanner;
 
 public class MergeSort {
 
-    // Sorts the list in place.
-    public static void mergeSort(List<Integer> list) {
-        mergeSortRecursive(list]);
+    // Sorts the list out-of-place, but stable!
+    public static List<Integer> mergeSort(List<Integer> list) {
+        return mergeSortRecursive(list);
     }
 
-    private static void mergeSortRecursive(List<Integer> list) {
-        if (start >= end) {
-            // Either the pivot from the previous sort was at the end of the 
-            // list (inequality case) OR the list contains one element (equality case)
-            return;
+    private static List<Integer> mergeSortRecursive(List<Integer> list) {
+        if (list.size() <= 1) {
+            return list;
         }
 
-        int begin = start;
-        int pivot = list.get(end);
-        int finish = end;
+        // Divide and conquer sort.
+        List<Integer> beginList = mergeSortRecursive(list.subList(0, list.size() / 2));
+        List<Integer> endList = list.subList(list.size() / 2, list.size());
 
-        while (begin < finish) {
-            if (list.get(begin) > pivot) {
-                // Move the number to the left of the pivot.  Because
-                // the pivot is on the end, this involves moving three numbers.
-                list.set(finish, list.get(begin));
-                list.set(begin, list.get(finish - 1));
-                list.set(finish - 1, pivot);
+        // Return the merged sorted list!
+        return merge(beginList, endList);
+    }
 
-                finish--;
+    private static List<Integer> merge(List<Integer> listOne, List<Integer> listTwo) {
+        ArrayList<Integer> newList = new ArrayList<Integer>();
+        int indexOne = 0, indexTwo = 0;
+
+        while (indexOne < listOne.size() || indexTwo < listTwo.size()) {
+            if (indexOne >= listOne.size()) {
+                // List one is exhausted. Add list two items to newList
+                newList.add(listTwo.get(indexTwo));
+                indexTwo++;
+            } else if (indexTwo >= listTwo.size()) {
+                // List two is exhausted.
+                newList.add(listOne.get(indexOne));
+                indexOne++;
             } else {
-                begin++;
+                if (listOne.get(indexOne) < listTwo.get(indexTwo)) {
+                    newList.add(listOne.get(indexOne));
+                    indexOne++;
+                } else {
+                    newList.add(listTwo.get(indexTwo));
+                    indexTwo++;
+                }
             }
         }
 
-        // begin and finish should be equal! That means the pivot is in the right 
-        // place (pivot location == begin == finish)
-
-        // Divide and conquer on the left list and right list
-        quickSortRecursive(list, start, begin - 1);
-        quickSortRecursive(list, begin + 1, end);
+        return newList;
     }
 
     public static void outputList(List<Integer> list) {
@@ -65,7 +72,7 @@ public class MergeSort {
         }
 
         outputList(list);
-        mergeSort(list);
+        list = new ArrayList<Integer>(mergeSort(list));
         outputList(list);
 
     }
