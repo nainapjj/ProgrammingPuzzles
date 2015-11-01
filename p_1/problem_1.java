@@ -1,10 +1,8 @@
 import java.util.Scanner;
-import java.util.InputMismatchException;
-import java.io.IOException;
 
 public class problem_1 {
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) {
         // Create a scanner class in order to get access to standard input
         Scanner scanner = new Scanner(System.in);
         int maxValue = -1;
